@@ -1,0 +1,7 @@
+sp:24
+feature_acc:
+[2]
+qual_acc:
+[0.88042048]
+PCAdim_acc:
+[2]

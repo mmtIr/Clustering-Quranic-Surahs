@@ -1,0 +1,10 @@
+plot#	#clusters	type	windowSize	#chapter	PCA dim	#feature	minSupport	QualityMeasure	#True(Mk+Md)	#mkTrue	#mdTrue	#mkTrue/#realMk\#tmdTrue/#realMd	#realMK-#realMD in each cluster	delChapters	sameChapters
+---------gSapn->PCA->clustering---------
+*In all over Quran considered number of makki surahs is 86 and for madani surahs is 28
+............
+19	8	Root	2	104	2	2	11	0.906031660962024	_	_	_	_	_	[[1, 6], [2, 0], [8, 0], [51, 12], [6, 0], [5, 1], [2, 4], [1, 5]]	0.875	0.11088057148926879	 ,same chaps: 91, [{99, 100, 101, 103, 104, 106, 107, 110, 93}, {113}]112, [{99, 100, 101, 103, 104, 106, 107, 110, 93}, {113}]
+
+************
+Maximum achived silhouette score for PCA is: 0.906031660962024 in plot(s) number(s)[19]
+maximum achived max rate mean for clusters is: 0.875 in plot(s) number(s)[19]
+minimum achived max rate variance for clusters is: 0.11088057148926879 in plot(s) number(s)[19]

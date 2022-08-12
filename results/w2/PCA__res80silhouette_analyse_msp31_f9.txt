@@ -1,0 +1,79 @@
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	0 , 8 , 8 , 1 , [البقرة, آل عمران, النساء, الأعراف, يونس, هود, النحل, الزمر,]
+ith_clusterSamps:
+[0.05217143 0.41773072 0.42074823 0.49481347 0.50228464 0.63865479
+ 0.66577171 0.72770062]
+cluster mean silhouette:0.48998445054808726
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	9 , 10 , 1 , 2 , [التوبة,]
+ith_clusterSamps:
+[0.]
+cluster mean silhouette:0.0
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	11 , 17 , 6 , 3 , [الكهف, الحج, العنكبوت, فاطر, الشورى, الجاثية,]
+ith_clusterSamps:
+[-0.31924303 -0.08590037  0.31345103  0.44707306  0.46364202  0.55756212]
+cluster mean silhouette:0.22943080623428044
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	18 , 21 , 3 , 4 , [الرعد, المؤمنون, فصلت,]
+ith_clusterSamps:
+[0.23362365 0.46156492 0.48288942]
+cluster mean silhouette:0.39269266670003256
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	22 , 24 , 2 , 5 , [المائدة, سبإ,]
+ith_clusterSamps:
+[0.75774969 0.76181093]
+cluster mean silhouette:0.7597803115831019
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	25 , 28 , 3 , 6 , [مريم, طه, القصص,]
+ith_clusterSamps:
+[0.09933597 0.10732279 0.41332818]
+cluster mean silhouette:0.20666231233322627
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	29 , 30 , 1 , 7 , [الشعراء,]
+ith_clusterSamps:
+[0.]
+cluster mean silhouette:0.0
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	31 , 35 , 4 , 8 , [الأنعام, الإسراء, الأنبياء, غافر,]
+ith_clusterSamps:
+[0.09650891 0.12004387 0.20650898 0.38573085]
+cluster mean silhouette:0.20219815396293794
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	36 , 40 , 4 , 9 , [الفرقان, النمل, يس, الأحقاف,]
+ith_clusterSamps:
+[0.16476262 0.17802787 0.27413319 0.42266734]
+cluster mean silhouette:0.2598977527114429
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	41 , 44 , 3 , 10 , [الروم, السجده, ص,]
+ith_clusterSamps:
+[0.71598537 0.73093889 0.82577174]
+cluster mean silhouette:0.7575653348033856
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	45 , 52 , 7 , 11 , [الحجر, الزخرف, الدخان, ق, الطور, النازعات, الغاشية,]
+ith_clusterSamps:
+[0.3049555  0.43216866 0.50186952 0.62175142 0.64462988 0.77875836
+ 0.78353464]
+cluster mean silhouette:0.5810954260675121
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	53 , 57 , 4 , 12 , [إبراهيم, لقمان, الحديد, التغابن,]
+ith_clusterSamps:
+[0.37654857 0.43180416 0.45920127 0.58901022]
+cluster mean silhouette:0.46414105763617125
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	58 , 61 , 3 , 13 , [يوسف, النور, الحجرات,]
+ith_clusterSamps:
+[0.47118035 0.47870704 0.5128474 ]
+cluster mean silhouette:0.48757826300926954
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	62 , 66 , 4 , 14 , [الأنفال, الأحزاب, الفتح, المجادلة,]
+ith_clusterSamps:
+[0.26646805 0.33388143 0.53941825 0.56830586]
+cluster mean silhouette:0.427018395552037
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	67 , 69 , 2 , 15 , [محمد, الطلاق,]
+ith_clusterSamps:
+[0.35195983 0.4181365 ]
+cluster mean silhouette:0.38504816542858306
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	70 , 99 , 29 , 16 , [الفاتحة, الصافات, الذاريات, النجم, القمر, الرحمن, الممتحنة, الصف, الجمعة, المنافقون, التحريم, الملك, القلم, الحاقة, المعارج, نوح, المزمل, المدثر, القيامة, الإنسان, النبإ, التكوير, الانشقاق, البروج, الأعلى, الفجر, التين, العلق, الإخلاص,]
+ith_clusterSamps:
+[0.04064514 0.04437527 0.11899945 0.19093153 0.2409221  0.41363829
+ 0.50036902 0.51790397 0.56394967 0.63677454 0.65269722 0.67807654
+ 0.67969692 0.69448473 0.70215125 0.70473    0.70550783 0.71862018
+ 0.7192511  0.72341547 0.72505564 0.73843269 0.745616   0.74998715
+ 0.75213227 0.7660352  0.77330127 0.78811373 0.7953666 ]
+cluster mean silhouette:0.5890062333472312
+y_lower,y_upper,len(ith_clusterSamps),ytickI,k:	100 , 101 , 1 , 17 , [الحشر,]
+ith_clusterSamps:
+[0.]
+cluster mean silhouette:0.0
+ylim:
+[0, 102] cq0:0.4668409801805193
+yticks:
+y:
+[0, 1, 2, 3, 4, 5, 6, 7, 9, 11, 12, 13, 14, 15, 16, 18, 19, 20, 22, 23, 25, 26, 27, 29, 31, 32, 33, 34, 36, 37, 38, 39, 41, 42, 43, 45, 46, 47, 48, 49, 50, 51, 53, 54, 55, 56, 58, 59, 60, 62, 63, 64, 65, 67, 68, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 100]

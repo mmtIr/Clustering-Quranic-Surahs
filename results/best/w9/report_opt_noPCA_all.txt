@@ -1,0 +1,9 @@
+plot#	#clusters	type	windowSize	#chapter	#feature	minSupport	QualityMeasure	#True(Mk+Md)	#mkTrue/#realMk	mdTrue/realMd	#realMK-#realMD in each cluster	delChapters	sameChapters
+----------gSapn->clustering----------
+*In all over Quran considered number of makki surahs is 86 and for madani surahs is 28
+41	0	Root	9	112	1217	42	-20	_	_	_	_	_	_.._	 ,same chaps: 92, [{107}, {110}]103, [{107}, {110}]
+
+************
+Maximum achived silhouette score for noPCA is: -2 in plot(s) number(s) []
+maximum achived max rate mean for clusters is: -2 in plot(s) number(s)[]
+minimum achived max rate variance for clusters is: 2 in plot(s) number(s)[]

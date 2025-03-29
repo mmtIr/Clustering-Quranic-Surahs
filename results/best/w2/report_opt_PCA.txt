@@ -1,3 +1,0 @@
-plot#	#clusters	type	windowSize	#chapter	PCA dim	#feature	minSupport	QualityMeasure	#True(Mk+Md)	#mkTrue	#mdTrue	#mkTrue/#realMk\#tmdTrue/#realMd	#realMK-#realMD in each cluster	delChapters	sameChapters
----------gSapn->PCA->clustering---------
-19	8	Root	2	104	2	2	11	0.906031660962024	_	_	_	 ,same chaps: 91, [{99, 100, 101, 103, 104, 106, 107, 110, 93}, {113}]112, [{99, 100, 101, 103, 104, 106, 107, 110, 93}, {113}]

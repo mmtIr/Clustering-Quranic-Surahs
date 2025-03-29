@@ -67,6 +67,17 @@ from rpy2 import robjects
 from rpy2.robjects.packages import importr
 import rpy2.robjects.numpy2ri
 GlPth = './results/'
+dpi_a = 1200
+
+#************************
+"""
+sd = 5
+from numpy import random as n_random
+import random as r_random
+n_random.seed(sd)
+r_random.seed(sd)
+"""
+#************************
 "-----------------------------------------------------------------------------"
 def createFolder(directory):
     try:
@@ -106,6 +117,7 @@ def delSubSubs_pure(spR,newSub,gSubGraphs,gSubGraphs_l,gSubGraphs_v,SubSubSp,gSu
     out_add = 1
     ssp1 = set(gSubGraphs.keys())
     ssp2 = spR & ssp1
+
     for sssp in ssp2:
         curSg_sp = gSubGraphs[sssp]
         curSg_sp_l = gSubGraphs_l[sssp]
@@ -146,6 +158,7 @@ def delSubSubs_pure(spR,newSub,gSubGraphs,gSubGraphs_l,gSubGraphs_v,SubSubSp,gSu
     return [outSubGraphs,outSubGraphs_l,outSubGraphs_v,outSubGraphs_wh],out_add
 "-----------------------------------------------------------------------------"
 def readSubGrs_pure(inputFileName,node_lbls,subFilePath,SubSubSp):
+
     nodelblLess = node_lbls
     f = open(inputFileName,'r')
     fc = f.readlines()
@@ -162,6 +175,7 @@ def readSubGrs_pure(inputFileName,node_lbls,subFilePath,SubSubSp):
     "max ignorable difference of subgraph of subgraph supprorts"
     f_.write('اختلاف پشتیبان قابل قبول برای زیرگراف زیرگرافها '+str(SubSubSp)+'\n')
     for fc_line in fc:
+
         fc_line = fc_line.replace('\n','')
         fc_lt = fc_line.split(' ')
         g_k = g_subGraphs.keys()
@@ -240,6 +254,7 @@ def readSubGrs_pure(inputFileName,node_lbls,subFilePath,SubSubSp):
     out_subGraphs_wh = []
     for dci in g_subGraphs.keys():
         if not g_subGraphs.get(dci):
+            #print('*****NOTE!!!!!!!!!!!!\nNOTE!!!!!!!!!!!!\nNOTE!!!!!!!!!!!!\nNOTE!!!!!!!!!!!!\n')
             g_subGraphs.pop(dci)
             g_subGraphs_l.pop(dci)
             g_subGraphs_v.pop(dci)
@@ -482,7 +497,7 @@ def RanGs_pure(fn100,unqLbl,maxZCh,window,ch_n,SubSubSpj,ch_Grs):
             plt.close()            
         plt.figure()
         plt.title(make_farsi_text(('پرتکرارترین ویژگی قبل از برداری سازی (نماینده‌ی حذف)')))
-        plt.savefig('./results/mostFreq'+str(mfCnt)+'_raw.png')"""
+        plt.savefig('./results/mostFreq'+str(mfCnt)+'_raw.svg',format='svg',dpi=dpi_a)"""
     return outRan
 "-----------------------------------------------------------------------------"
 def RanGs(fn100,unqLbl,maxZCh,window,ch_n,SubSubSpj,ch_Grs):
@@ -519,7 +534,7 @@ def RanGs(fn100,unqLbl,maxZCh,window,ch_n,SubSubSpj,ch_Grs):
             plt.close()            
         plt.figure()
         plt.title(make_farsi_text(('پرتکرارترین ویژگی قبل از برداری سازی (نماینده‌ی حذف)')))
-        plt.savefig('./results/mostFreq'+str(mfCnt)+'_raw.png')"""
+        plt.savefig('./results/mostFreq'+str(mfCnt)+'_raw.svg',format='svg',dpi=dpi_a)"""
     return outRan
 "-----------------------------------------------------------------------------"
 def mCheck(gsRes_p,RanGsRes):
@@ -827,15 +842,19 @@ def del0s_commons_normal(inArr,delCs,presentCs):
             else:
                 clc00=1
                 break"""    
-        "delete odd features(all zero or all one in all vectors)"
+        "delete odd features(all zero  (not all one in all vectors))"
         rm_features = []
-        if np_shape(cleanedList00)[0] in (cleanedList00>0).sum(0):
-            for com_200 in np_where(((cleanedList00>0).sum(0) == np_shape(cleanedList00)[0]))[0]:
-                if(len(np_where((cleanedList00[:,com_200]-cleanedList00[0,com_200]) !=0)[0])<1):
+        
+        if np_shape(cleanedList00)[0] in (cleanedList00>0).sum(0): #any feature in all vecs
+            for com_200 in np_where(((cleanedList00>0).sum(0) == np_shape(cleanedList00)[0]))[0]: #com_200 is one common feature among all vecs
+                if(len(np_where((cleanedList00[:,com_200]-cleanedList00[0,com_200]) !=0)[0])<1): #delete if also has a difference among all(not active in run cases so just check [0,com_200]) 
+                    assert 1==90,'deleted what?if1'+str(cleanedList00)+'*'+str(np_shape(cleanedList00)[0])+'*'+str((cleanedList00>0).sum(0))+'\n-----------\n'+str(np_where(((cleanedList00>0).sum(0) == np_shape(cleanedList00)[0]))[0])+'\n-----------\n'+str(cleanedList00[:,com_200]-cleanedList00[0,com_200])+'*'+str(np_where((cleanedList00[:,com_200]-cleanedList00[0,com_200]) !=0)[0])
                     print("one feature is odd:",com_200,np_where((cleanedList00[:,com_200]-cleanedList00[0,com_200]) !=0)[0])
                     print("so deleted.")
                     return
                     rm_features.append(com_200)
+            #"""else:raise NotImplementedError #,'Just add for loop before last if to cover all rows not just zezro in cleanedList00[0,com_200].'"""
+
         if 0 in cleanedList00.sum(0):
             print ("Error! there is a frequent subgraph in no chapter!!!!")
             return
@@ -858,6 +877,7 @@ def del0s_commons_normal(inArr,delCs,presentCs):
     return cleanedList01,chv00,rm00
 "-----------------------------------------------------------------------------"
 def cluster_show_write(inData1,cluster_res,frName,algName,prmStr1,dlChs,plot_Nb,chps,dsMetric,same_k,same_c,same_c_mkd,msp,preFNum,preSubFr,preSubFr_ch):
+
     svNm = []
     svNm2 = []
     svNm3 = []
@@ -897,7 +917,7 @@ def cluster_show_write(inData1,cluster_res,frName,algName,prmStr1,dlChs,plot_Nb,
         "plt.ylim([0,preFNum])"    
         plt.xticks(range(1,len(svNm3)+1),make_farsi_text2(svNm3))
         plt.bar(range(1,len(svNm3)+1),ch_fNums, width = 0.2, color='black')
-        plt.savefig(frName+'_res'+str(plot_Nb)+'_msp'+str(msp)+'ch_features3.png')
+        plt.savefig(frName+'_res'+str(plot_Nb)+'_msp'+str(msp)+'ch_features3.svg',format='svg',dpi=dpi_a)
         plt.close()
                
         plt.figure(figsize=(55,10))
@@ -908,7 +928,7 @@ def cluster_show_write(inData1,cluster_res,frName,algName,prmStr1,dlChs,plot_Nb,
         plt.ylim([0,preFNum])                
         plt.xticks(range(1,len(svNm3)+1),svN)
         plt.bar(range(1,len(svNm3)+1),ch_fNums, width = 0.2, color = 'black')
-        plt.savefig(frName+'_res'+str(plot_Nb)+'_msp'+str(msp)+'ch_Nfeatures4.png')        
+        plt.savefig(frName+'_res'+str(plot_Nb)+'_msp'+str(msp)+'ch_Nfeatures4.svg',format='svg',dpi=dpi_a)     
         plt.close()    
 
     frsName = open(frName+'_res'+str(plot_Nb)+'_msp'+str(msp)+'_f'+str(np_shape(inData1)[1])+'.txt','w')
@@ -924,6 +944,8 @@ def cluster_show_write(inData1,cluster_res,frName,algName,prmStr1,dlChs,plot_Nb,
         lbls = cluster_res[1]
     elif (algName == 'Hierarchical'):
         lbls = np_asarray(cluster_res[1])  
+        lbls22 = np_asarray(cluster_res[5])
+        uniq22 = list(set(lbls22)) 
         frsName.write('\n Hierarchical: \t'+'\t #clusters ='+str(len(set(lbls)))+'\n')                     
     unique_labels = set(lbls)
     colors = [plt.cm.Spectral(each) for each in np_linspace(0, 1, len(unique_labels))]
@@ -933,10 +955,13 @@ def cluster_show_write(inData1,cluster_res,frName,algName,prmStr1,dlChs,plot_Nb,
         cq0_s = silhouette_samples(inData1,lbls, metric=dsMetric)
     plt.close('all')
     fArch1 = open(frName+'_res'+str(plot_Nb)+'silhouette_analyse_msp'+str(msp)+'_f'+str(np_shape(inData1)[1])+'.txt','w')
-    fg1 = plt.figure(figsize=(10,15))
-    fig1 = fg1.gca()    
-    fg2 = plt.figure(figsize=(10,15))
-    plt.rc('font',family = 'Dejavu Sans',size = 6)
+    #fg1 = plt.figure(figsize=(10,15))
+    plt.rc('font',family = 'Nazli',size = 6)
+    fg1 = plt.figure(figsize=(3.5,7.6))
+    fig1 = fg1.gca() 
+    fg2 = plt.figure(figsize=(3.5,7.5))   
+    #fg2 = plt.figure(figsize=(10,15))
+    plt.rc('font',family = 'Nazli',size = 6)
     fig2 = fg2.gca()
     # Number of clusters in labels, ignoring noise if present.
     n_clusters_ = len(set(lbls)) - (1 if -1 in lbls else 0)
@@ -953,7 +978,7 @@ def cluster_show_write(inData1,cluster_res,frName,algName,prmStr1,dlChs,plot_Nb,
         if(algName=='dbscan'):
             print('Note! dbscan part is incomplete')
             return
-            bb = (np_array(class_member_mask) & np_array(core_samples_mask))                    
+            bb = (np_array(class_member_mask) & np_array(core_samples_mask))                                   
             xy1 =(np_where(bb==True))
             fig2.plot(lbls[bb].tolist(), xy1[0].tolist(), 'o', markerfacecolor=tuple(col),
                 markeredgecolor='k', markersize=7)    
@@ -1006,6 +1031,27 @@ def cluster_show_write(inData1,cluster_res,frName,algName,prmStr1,dlChs,plot_Nb,
         grNb.append(clCnt)
         svGL.append(svG)
         frsName.write('--------------------------------------\n')
+
+    if len(lbls) != 2:        
+        frsName22 = open(frName+'_res'+str(plot_Nb)+'_msp'+str(msp)+'_f'+str(np_shape(inData1)[1])+'_until2.txt','w')
+        if algName == 'Hierarchical':
+            frsName22.write('\n Hierarchical: \t'+'\t #clusters ='+str(len(set(lbls22)))+'\n')                      
+        frsName22.write('****************************************************')
+        frsName22.write('پارامترها')
+        for k22 in uniq22:
+            class_member_mask22 = (lbls22 == k22)
+            frsName22.write('گروه'+str(k22)+'\n')
+            clCnt22 = 0
+            ch_fNums_k22 = ch_fNums[class_member_mask22]
+            cls_mask22 = np_where(lbls22 == k22)[0]
+            for ch in svNm2[class_member_mask22]:
+                if frName.find('PCA') == -1:            
+                    ch_ = '(' + str(ch_fNums_k22[clCnt22])+')' + ch
+                else:
+                    ch_ = '(' + str(preSubFr[cls_mask22[clCnt22]])+')'+ ch
+                frsName22.write(ch_)
+                clCnt22 = clCnt22+1
+            frsName22.write('--------------------------------------\n')                     
     "********makki madani matching*************"    
     mk_match = 'بیش از دو دسته داریم'
     if n_clusters_ == 2:
@@ -1028,17 +1074,19 @@ def cluster_show_write(inData1,cluster_res,frName,algName,prmStr1,dlChs,plot_Nb,
             clsScs += clsSc[0:-1]+' , '
         frsName.write(clsScs+'\n')
     frsName.close()
+    if len(lbls) != 2:
+        frsName22.close()
     plt.xlim([-1,n_clusters_ +1])
-    plt.rc('font',family = 'Dejavu Sans',size = 7)
-    plt.yticks(range(0,len(chps)),make_farsi_text2(svNm3))
+    #plt.rc('font',family = 'Nazli',size = 5)
+    plt.yticks(range(0,len(svNm3)),make_farsi_text2(svNm3)) #^^^
     plt.title(make_farsi_text(('')))
     plt.xlabel(make_farsi_text(('خوشه')))  
     plt.grid(True)
-    plt.savefig(frName+'1_res'+str(plot_Nb)+'_msp'+str(msp)+'_f'+str(np_shape(inData1)[1])+'.png')
+    plt.savefig(frName+'1_res'+str(plot_Nb)+'_msp'+str(msp)+'_f'+str(np_shape(inData1)[1])+'.svg',format='svg',dpi=dpi_a)
     plt.close()
     
     # The vertical line for average silhouette score of all the values
-    plt.rc('font',family = 'Dejavu Sans',size = 7)
+    #plt.rc('font',family = 'Dejavu Sans',size = 7)
     fig1.axvline(x=cluster_res[4], color="red", linestyle="--")
     plt.title(make_farsi_text('تحلیل silhouette'))
     plt.xlim([-1.1,1.1])    
@@ -1046,7 +1094,7 @@ def cluster_show_write(inData1,cluster_res,frName,algName,prmStr1,dlChs,plot_Nb,
     plt.ylabel(make_farsi_text('نقاط'))
     plt.xlabel(make_farsi_text('silhouette'))
     plt.yticks(xt1,yt1)    
-    plt.savefig(frName+'_res'+str(plot_Nb)+'silhouette_analyse_msp'+str(msp)+'_f'+str(np_shape(inData1)[1])+'.png')
+    plt.savefig(frName+'_res'+str(plot_Nb)+'silhouette_analyse_msp'+str(msp)+'_f'+str(np_shape(inData1)[1])+'.svg',format='svg',dpi=dpi_a)
     plt.close()
     
     fArch1.write('ylim:\n'+str([0,len(chps)-len(sh_sv)+sh_jump*n_clusters_]))    
@@ -1054,29 +1102,31 @@ def cluster_show_write(inData1,cluster_res,frName,algName,prmStr1,dlChs,plot_Nb,
     fArch1.close()
     plt.figure(figsize=(10,15))
     plt.hist(lbls,color = 'lightskyblue')
-    plt.rc('font',family = 'Dejavu Sans',size = 6)
+    #plt.rc('font',family = 'Dejavu Sans',size = 6)
     plt.xlim([-1,n_clusters_ +1])
     for txCnt in range(0,len(grNb)):
         plt.text(txCnt+1,0,make_farsi_text(svGL[txCnt]))
     plt.title(algName)
     plt.grid(True)
-    plt.savefig(frName+'2_res'+str(plot_Nb)+'_msp'+str(msp)+'_f'+str(np_shape(inData1)[1])+'.png')
+    plt.savefig(frName+'2_res'+str(plot_Nb)+'_msp'+str(msp)+'_f'+str(np_shape(inData1)[1])+'.svg',format='svg',dpi=dpi_a)
     plt.close('all')
     "because of self difined dist metric in hierarchical clustering dendrogram drawing part has been deleted"
     if (algName == 'Hierarchical') and ((cluster_res[2])[0] != ''):
-        plt.figure(figsize=(40,15))
-        plt.rc('font',family = 'Dejavu Sans',size = 15)
+        """plt.figure(figsize=(40,15))
+        plt.rc('font',family = 'Dejavu Sans',size = 15)"""
+        plt.rc('font',family = 'Nazli',size = 7)
+        plt.figure(figsize=(10,4))
         plt.xlabel(make_farsi_text(('سوره')))
         plt.ylabel(make_farsi_text(('فاصله')))        
         dendrogram(
             cluster_res[2],
             labels = make_farsi_text2(svNm3),
             leaf_rotation = 90.,  # rotates the x axis labels
-            leaf_font_size = 15.,  # font size for the x axis labels
+            leaf_font_size = 7.,  # font size for the x axis labels
             distance_sort = True            
             )
         plt.title('n_clusters: '+str(cluster_res[3])+', score: '+ str(cluster_res[4]))
-        plt.savefig(frName+'_res'+str(plot_Nb)+'_dendrogram_msp'+str(msp)+'_f'+str(np_shape(inData1)[1])+'.png')
+        plt.savefig(frName+'_res'+str(plot_Nb)+'_dendrogram_msp'+str(msp)+'_f'+str(np_shape(inData1)[1])+'.svg',format='svg',dpi=dpi_a)
         plt.close('all')
     """plt.figure()
     plt.pie(grNb,labels =make_farsi_text2(svGL))
@@ -1166,12 +1216,15 @@ def cluster_gs00_normal(inData,clusterType,fResName,prmStr,typePrm0,typePrm1,dis
             cq2 = -20
             n_clusters = -2
             mdl_o = []
+            mdl_o2 = []
+            cq22 = -20
             inDt = np_reshape(np_asarray(list(map(int,(np_asarray(inData)>0).ravel()))),(np_shape(inData)[0],np_shape(inData)[1]))
             for idxss in range(2,20):
                 lbls = fclusterdata(inDt,t=idxss,criterion='maxclust',metric=m_dist)
                 lbls = lbls.transpose()
                 lbls = lbls.tolist()
                 if(len(set(lbls)) == idxss):
+                
                     dataDistMat = m_dists(inDt)
                     cqq = silhouette_score(dataDistMat,lbls, metric='precomputed')
                     """if cqq == 'nan':
@@ -1194,6 +1247,9 @@ def cluster_gs00_normal(inData,clusterType,fResName,prmStr,typePrm0,typePrm1,dis
                         print('Error! out of range cqq for above inData,lbls. cqq=',cqq)
                         return"""
                     cq.append([idxss,cqq])
+                    if idxss == 2:
+                        mdl_o2 = c_copy(lbls)
+                        cq22 = c_copy(cqq)
                     if cqq>=cq2:
                         cq2 = c_copy(cqq)
                         n_clusters = c_copy(idxss)
@@ -1207,7 +1263,7 @@ def cluster_gs00_normal(inData,clusterType,fResName,prmStr,typePrm0,typePrm1,dis
             if cq2 == -20:
                 print (cq)
                 return [cq,[],[''],0,-20]
-            return [cq,mdl_o,[''],n_clusters,cq2]
+            return [cq,mdl_o,[''],n_clusters,cq2,mdl_o2,cq22]
         else:
             mdl = linkage(inData, method=typePrm0[1],metric=typePrm1)
             zz = mdl
@@ -1215,6 +1271,8 @@ def cluster_gs00_normal(inData,clusterType,fResName,prmStr,typePrm0,typePrm1,dis
             cq2 = -20
             n_clusters = -2
             mdl_o = []
+            mdl_o2 = []
+            cq22 = -10
             for idxss in range(2,20):
                 lbls = fcluster(mdl,idxss,criterion='maxclust')
                 lbls = lbls.transpose()
@@ -1247,6 +1305,9 @@ def cluster_gs00_normal(inData,clusterType,fResName,prmStr,typePrm0,typePrm1,dis
                         print('inData,lbls',inData,lbls)
                         print('Error! out of range cqq for above inData,lbls. cqq=',cqq)
                         return"""
+                    if idxss == 2:
+                        mdl_o2 = c_copy(lbls)
+                        cq22 = c_copy(cqq)
                     if cqq >= cq2:
                         cq2 = c_copy(cqq)
                         n_clusters = c_copy(idxss)
@@ -1260,7 +1321,7 @@ def cluster_gs00_normal(inData,clusterType,fResName,prmStr,typePrm0,typePrm1,dis
             if n_clusters == -2:
                 if cq2 == 1:
                     print("-----------ERROR!",cq) 
-            return [cq,mdl_o,zz,n_clusters,cq2]
+            return [cq,mdl_o,zz,n_clusters,cq2,mdl_o2,cq22]
     if typePrm1 == 'self':
         if distMt != 'self':
             print('Error! metric for silhouette and clustering distance should be same')
@@ -1593,12 +1654,21 @@ def main_QchCluster_opt0(clusterAlg,clPrm1,dn,wSt,wSize,min_sup,mx_z,writeGr,chN
     """
     "caseSt = ['Lem','LemW','Root']"
     "resPth1 = './results/chGraphs/'+str(caseSt[dn-1])+'/w'+str(wSize)"
-    """visual_style = {}
-    visual_style["vertex_size"] = 40
-    "drl,kk,circle,fr,lgl,random,rt"
-    visual_style["layout"] = 'rt'
-    visual_style["bbox"] = (700, 700)
-    visual_style["margin"] = 100"""
+    if wSize==4:
+        visual_style = {}
+        visual_style["vertex_size"] = 3 #40
+        "drl,kk,circle,fr,lgl,random,kk"
+        visual_style["layout"] = 'kk'
+        visual_style["bbox"] = (1.4,1.5) #surah87:(2.5,3.5) #(700, 700)
+        visual_style["margin"] = 0.5 #100
+        visual_style["vertex_color"] = "light blue"          
+        visual_style["vertex_frame_color"] = "light blue"
+        visual_style["vertex_label_dist"] = 1
+        visual_style["edge_width"]= 1
+        visual_style["edge_label_size"] = 5
+        visual_style["edge_color"] = "light grey"
+        visual_style["vertex_label_size"] = 10 #87:8
+        plt.rc('font',family = 'Nazli',size = 10)#87:8) #10)
     for i in range(0,len(docs_c)):
         d_txt = docs_c[i]
         d_txtT = d_txt.split(' ')
@@ -1633,22 +1703,27 @@ def main_QchCluster_opt0(clusterAlg,clPrm1,dn,wSt,wSize,min_sup,mx_z,writeGr,chN
             "g.es['label']=tmp0[2]"
         if(dirSt == 'd'):
             g.to_directed()
-        """
+        
         "visualize chapters graphs:"
-        "if (i == 8) | (i>50):"
-        "plt.rc('font',family = 'B Nazanin',size = 20)"
-        if i in [112,102,109,86,8]:
-            visual_style["vertex_label"] = make_farsi_text2(arbRoot(g.vs["label"],False))
-            visual_style["vertex_label"][1] = make_farsi_text2(['*اله'])[0]
-            print (visual_style["vertex_label"][1])
+        if (i in [112,102,109,86]) and (wSize==4):
+            figm, axm = plt.subplots(figsize=(1.4, 1.5)) #surah87:figsize=(2.5, 3.5))#(10,10)
+            #visual_style["vertex_label"] = make_farsi_text2(arbRoot(g.vs["label"],False))
+            visual_style["vertex_label"] = make_farsi_text2(arbRoot(g.vs['label'],False))
+            visual_style["vertex_label"][1] = make_farsi_text2(['‌ا‌للّه'])[0]
+            
+            #print (visual_style["vertex_label"][1],'\n',tmp0[0],'\n',tmp0[1])
+            #print(g.es['weight'])
+            
             visual_style["edge_label"] = g.es['weight']
-            visual_style["vertex_color"] = "light blue"            
-            chGp = plot(g,**visual_style)
-            strResFig= resPath3+'/ch'+str(i+1)+'*_'+str(len(tmp0[1]))+'nodes'+str(len(tmp0[0]))+'edges.png'
-            chGp.save(strResFig)
-        """
+            chGp = plot(g,**visual_style,target=axm)
+            
+            strResFig= resPath3+'/ch'+str(i+1)+'*_'+str(len(tmp0[1]))+'nodes'+str(len(tmp0[0]))+'edges.svg'
+            #chGp.save(strResFig.replace('edges','edges2'))
+            plt.savefig(strResFig,format='svg',dpi=dpi_a*2)
+            plt.close()
         "**************************"        
         tr_cr.append(g)
+    #assert 4==9
     """
     "plot of chapter lengths:"
     plt.title('length of chapters')
@@ -1657,7 +1732,7 @@ def main_QchCluster_opt0(clusterAlg,clPrm1,dn,wSt,wSize,min_sup,mx_z,writeGr,chN
     plt.xlim([0,115])
     plt.grid(axis=u'both')
     plt.bar(range(1,115),ch_lengths,color='blue',width=0.1)
-    plt.savefig('./result97/chapters_Len.png')
+    plt.savefig('./result97/chapters_Len.svg',format='svg',dpi=dpi_a)
     plt.close()
     """
     "3.reform graphs to compatible format to gspan code result in kcores.txt and run gSpan:"    
@@ -1675,14 +1750,19 @@ def main_QchCluster_opt0(clusterAlg,clPrm1,dn,wSt,wSize,min_sup,mx_z,writeGr,chN
     with open('nameSovar_c.txt','r') as svName:
         for svl in svName:
             svNm.append(svl)
-    plt.figure(figsize=(55,10))
-    plt.grid()
-    plt.rc('font',family = 'Dejavu Sans',size = 3)
+    #plt.rc('font',family = 'Nazli',size = 7)
+    #plt.figure(figsize=(70,10))
+    plt.figure(figsize=(6,2.2))
+    plt.rc('font',family = 'Nazli',size = 3)
     plt.xlabel(make_farsi_text('نام سوره'))
-    plt.ylabel(make_farsi_text('تعداد ویژگی'))
-    plt.xticks(range(1,chNb+1),make_farsi_text2(svNm))
-    plt.bar(range(1,chNb+1),np_sum(g_vecs>0,1), width = 0.2, color='black')
-    plt.savefig(clPrm1+'ch_features1_w'+str(wSize)+'.png')
+    plt.ylabel(make_farsi_text('تعداد زیرگراف پرتکرار بسته'))
+    plt.bar(range(1,chNb+1),np_sum(g_vecs>0,1), width = 0.5, color='black')
+    plt.xticks(range(1,chNb+1),make_farsi_text2(svNm),rotation=60)
+    plt.grid()
+    #plt.rc('font',family = 'DejaVu Sans',size = 20)
+    plt.savefig(clPrm1+'ch_features1_w'+str(wSize)+'.svg',format='svg',dpi=(dpi_a))
+    #plt.savefig(clPrm1+'ch_features1_w'+str(wSize)+'.png',format='png',dpi=(300))
+    plt.savefig(clPrm1+'ch_features1_w'+str(wSize)+'.eps',format='eps',dpi=(dpi_a))
     plt.close()
     fplt = open(clPrm1+'ch_features1_w'+str(wSize)+'.txt','w')
     ss_vv = ''
@@ -1692,15 +1772,23 @@ def main_QchCluster_opt0(clusterAlg,clPrm1,dn,wSt,wSize,min_sup,mx_z,writeGr,chN
     for fpltc in np_sum(g_vecs>0,1):
         fplt.write(str(fpltc)+' ')
     fplt.close()
-    plt.figure(figsize=(55,10))
-    plt.grid()
-    plt.rc('font',family = 'DejaVu Sans',size = 10)
+
+    #plt.figure(figsize=(55,10))
+    plt.rc('font',family = 'Nazli',size = 4)
+    plt.figure(figsize=(6,1.7))
     plt.xlabel(make_farsi_text(('شماره سوره')))
     plt.ylabel(make_farsi_text(('تعداد ویژگی')))
-    plt.xticks(range(1,chNb+1),range(1,chNb+1))
-    plt.bar(range(1,chNb+1),np_sum(g_vecs>1,1), width = 0.2, color = 'black')
-    plt.savefig(clPrm1+'ch_Nfeatures2_w'+str(wSize)+'.png')
+    plt.bar(range(1,chNb+1),np_sum(g_vecs>0,1), width = 0.5, color = 'black') #^^^
+    #plt.rc('font',family = 'Nazli',size = 7)
+    plt.xticks(range(1,chNb+1),range(1,chNb+1),rotation=70)
+    #plt.rc('font',family = 'B Nazanin',size = 20)
+    plt.grid()
+    plt.savefig(clPrm1+'ch_Nfeatures2_w'+str(wSize)+'.svg',format='svg',dpi=(dpi_a))
+    #plt.savefig(clPrm1+'ch_Nfeatures2_w'+str(wSize)+'.jpg',format='jpg',dpi=(dpi_a),pad_inches=0.1,quality=100)
+    #plt.savefig(clPrm1+'ch_Nfeatures2_w2'+str(wSize)+'.png',format='png',dpi=(300),rotation=90)
+    plt.savefig(clPrm1+'ch_Nfeatures2_w'+str(wSize)+'.eps',format='eps',dpi=(dpi_a))
     plt.close()
+    #assert 5==9
     prmS = 'window size:'+str(gtb_ints[1])+'min support:'+str(min_sup)+'%min support:'+str(gtb_ints[5])
     "write results in file:"
     fV = open(clPrm1+'OriginalInVecs.txt','w')
@@ -1710,6 +1798,7 @@ def main_QchCluster_opt0(clusterAlg,clPrm1,dn,wSt,wSize,min_sup,mx_z,writeGr,chN
             fVw += str(fVcc)+' '
         fV.write(fVw[0:-1]+'\n')
     fV.close()
+
     return [np_asarray(['compatible change']),gtb_ints[8],prmS],g_vecs
 "-----------------------------------------------------------------------------"
 def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapter_nm0,clusterMetr,clusterMetr_pca,my_dn,my_wSt,PCA_FN,mkMd_sufficient,PCAjp,sp_jp,dlSubGr_Diff,StdScl_F,dec_alg,minMxRMean,minMxRVar,tst_case):
@@ -1717,7 +1806,7 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
     "برای اندازه پنجره‌های متفاوت بعد از حذف بردارهای صفر نمودارهای کمینه پشتیبان-کیفیت خوشه‌بندی به ازای هر روش و نیز با اعمال PCA و بدون آن تولید می‌شود. در پایان نیز مشخصات بهترین نتایج هم از نظر درصد و هم در صورت دوخوشه ای بودن تطابق با مکی-مدنی نوشته می‌شود تا بعد نمودار سلسله مراتبی مربوط به آن تولید و نتیجه از نظر معنایی مطالعه شود.‌"    
     my_labels = []
 
-    if tst_case[0].find('test') != -1:
+    """if tst_case[0].find('test') != -1:
         cnt_plot = tst_case[2] - 1
         # code can be used after some changes for general compares (exa: a clustering with 3 and one with 4 clusters could be compared in 3-3 or 4-4 clusters by change cutt-off threshold of one of clustering)
         # but here beacause calcDiff_cls just can compare two clusters we need two clusters for all best clustering
@@ -1728,10 +1817,12 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
         for myl in range(0,len(tst_clusters)):
             my_labels.append([])
     else:
-        cnt_plot = 0
+        cnt_plot = 0"""
+    cnt_plot = 0
     cnt_vecFile = 0
-    maxSil_pca = [-2,[],-2,[],2,[]]
-    maxSil  = [-2,[],-2,[],2,[]]
+    maxSil_pca = [-2,[],-2,[],2,[],[],[]]
+    maxSil  = [-2,[],-2,[],2,[],[],[]]
+
     AlgN = 'Hierarchical'
     "['clustering method','clustering dist method','clustering dist',quality measure,dist in quality measure]"
     my_Prms = [AlgN,clsPrm,distCr,'silhouette']
@@ -1804,13 +1895,13 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
         noPCA_dim = []
         chapter_nm = c_copy(chapter_nm0)
         max_my_spCnt = 114
-        if tst_case[0].find('test') != -1:
+        """if tst_case[0].find('test') != -1:
             max_my_spCnt = tst_case[4]+1
-            my_spCnt = tst_case[4]
+            my_spCnt = tst_case[4]"""
         for my_spCntt in range(my_spCnt,max_my_spCnt,sp_jp):
             if(type(my_if[0])==int):
                 break
-            print ('sp:',my_spCntt,'\n')
+
             my_features = minSp_delOddFeatures_normal(m_ftArr,my_spCntt)
             "my_features = minSp_delOddFeatures_bin(m_ftArr,my_spCntt)"
             "print 'after del less than sp\n',my_features[0],np_shape(my_features)"
@@ -1828,6 +1919,7 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
             my_0Chs_in = c_copy(my_0Chs)
             my_0Chs_in.extend(list(chain(*same_ch)))
             my_0Chs_in.sort()
+            print ('sp:',my_spCntt,'featueNb:',featur_Nb[1],'\n')
             "............................."           
             "write results in file:"
             fV = open(sPth+'clusteringInVecs_msp'+str(my_spCntt)+'.txt','w')
@@ -1862,8 +1954,11 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
             cnt_plot += 1
             if maxSil[0] == my_res1[4]:
                 maxSil[1].append(cnt_plot)
+                maxSil[6].append(my_res1[5])
+                maxSil[7].append(my_res1[6])
             elif maxSil[0] < my_res1[4]:
-                maxSil[0], maxSil[1] = my_res1[4],[cnt_plot]          
+                maxSil[0], maxSil[1], maxSil[6], maxSil[7] = my_res1[4],[cnt_plot], [my_res1[5]],[my_res1[6]]
+
             [mk1,md1,my_mmScore,mkTrue,mkReal,mdTrue,mdReal] = 7*['_']
             zeroChs0, _ = get_SovarNames2('nameSovar_c.txt',my_0Chs)
             strtmp=''
@@ -1932,12 +2027,14 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
                 pcaF_acc = []
                 dim_acc = []
                 qual_acc = []
-                if tst_case[0].find('test') != -1:
+                """if tst_case[0].find('test') != -1:
                     endDim = tst_case[1]-1
                     dimCnt = tst_case[1]
                 else:
                     endDim = 1
-                    dimCnt = dec2
+                    dimCnt = dec2"""
+                endDim = 1
+                dimCnt = dec2                    
                 if clusterMetr_pca.find('cosine') == -1:
                     endDim = 0
                 PCAjp_1 = c_copy(PCAjp)
@@ -1970,7 +2067,7 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
                                     plt.grid(axis=u'both')
                                     plt.xlabel('eigen number')
                                     plt.ylabel('eigen value')
-                                    plt.savefig(sPth+'dim'+str(dimCnt)+'_msp'+str(my_spCntt)+'_w'+str(my_wCnt)+'eigens.png')                        
+                                    plt.savefig(sPth+'dim'+str(dimCnt)+'_msp'+str(my_spCntt)+'_w'+str(my_wCnt)+'eigens.svg',format='svg',dpi=dpi_a)                        
                                     plt.close()
                                 """if dimCnt ==114-zc:
                                     my_eigVals = my_pca.explained_variance_"""
@@ -2018,9 +2115,10 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
                     """if type(my_res2[1]) == list:
                         my_labels.append([lbl_conv(my_res2[1],my_0Chs,same_ch),my_res2[4]])
                     else:
-                        my_labels.append([lbl_conv(my_res2[1].labels_,my_0Chs,same_ch),my_res2[4]])
+                        my_labels.append([lbl_conv(my_res2[1].labels_,my_0Chs,same_ch),my_res2[4]]) #cq,mdl_o,zz,n_clusters,cq2,mdl_o2,cq22
                     """
-                    if tst_case[0].find('test') != -1:
+                    #my_labels =[lbl_conv(np_asarray(my_res2[5]),my_0Chs,same_ch,same_key),my_res2[6]]
+                    """if tst_case[0].find('test') != -1:
                         my_labels[tst_clusters.index(my_res2[3])] =[lbl_conv(np_asarray(my_res2[1]),my_0Chs,same_ch,same_key),my_res2[4]]
                         for clRange in tst_clusters:
                             if clRange == my_res2[3]:
@@ -2033,11 +2131,15 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
                             cq_2 = silhouette_score(c0,lbls2, metric=clusterMetr_pca) 
                             my_labels[tst_clusters.index(clRange)] = [lbl_conv(lbls2,my_0Chs,same_ch,same_key),cq_2]
                         "(tst_case[3])[tst_case[3].index(my_res2[3])] -= 0.5 # to manage same number of clusters"
+                        """
 
                     if maxSil_pca[0] == my_res2[4]:
                         maxSil_pca[1].append(cnt_plot)
-                    elif maxSil_pca[0] < my_res2[4]:
-                        maxSil_pca[0], maxSil_pca[1] = my_res2[4],[cnt_plot]
+                        maxSil_pca[6].append(lbl_conv(np_asarray(my_res2[5]),my_0Chs,same_ch,same_key))
+                        #maxSil_pca[6].append(my_res2[5])
+                        maxSil_pca[7].append(my_res2[6])  
+                    elif maxSil_pca[0] < my_res2[4]: 
+                        maxSil_pca[0], maxSil_pca[1], maxSil_pca[6], maxSil_pca[7] = my_res2[4],[cnt_plot], lbl_conv(np_asarray(my_res2[5]),my_0Chs,same_ch,same_key), [my_res2[6]] #[my_res2[5]], [my_res2[6]]
                     [mk1,md1,my_mmScore,mkTrue,mkReal,mdTrue,mdReal] = 7*['_']
                     if my_res2[3] > 1:
                         clusters_KD = KDmatching_new(my_res2[1],my_0Chs,chapter_nm0,same_ch)
@@ -2110,8 +2212,8 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
                         PCAjp_1 = 1
                     else:
                         dimCnt -= PCAjp_1
-                if tst_case[0].find('test') != -1:
-                    cluster_show_write_Test(c0,sPth+'PCA_',my_0Chs,same_ch,my_spCntt,preSbg_fr,preSbg_frIdx,my_if[4],clusterMetr_pca)
+                """if tst_case[0].find('test') != -1:
+                    cluster_show_write_Test(c0,sPth+'PCA_',my_0Chs,same_ch,my_spCntt,preSbg_fr,preSbg_frIdx,my_if[4],clusterMetr_pca)"""
                 pcaF_acc_.append(pcaF_acc)
                 dim_acc_.append(dim_acc)
                 qual_acc_.append(qual_acc)
@@ -2173,12 +2275,13 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
         plt.legend(loc='lower right')
         plt.grid(axis=u'both')
         plt.ylim([-2,1])
-        plt.savefig(sPth+'msp-sil_w'+str(my_wCnt)+'.png')        
+        plt.savefig(sPth+'msp-sil_w'+str(my_wCnt)+'.svg',format='svg',dpi=dpi_a)        
         plt.close('all')
         
         fig = plt.figure(figsize=(20,10))
         plt.rc('font',family = 'Dejavu Sans',size = 8)
-        ax = fig.gca(projection='3d')
+        #ax = fig.gca(projection='3d')
+        ax = fig.add_subplot(projection='3d')
         ax.plot(my_w_minSp1,noPCA_dim,my_w_scores1,marker='o')
         ax.legend()
         ax.set_xlim([0,60])
@@ -2187,7 +2290,7 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
         ax.set_xlabel(make_farsi_text(('کمینه پشتیبان')))
         ax.set_zlabel(make_farsi_text(('مقدار silhouette')))
         ax.set_ylabel(make_farsi_text(('تعداد ویژگی')))
-        plt.savefig(GlPth+'msp-sil-f_w'+str(my_wCnt)+'.png')
+        plt.savefig(GlPth+'msp-sil-f_w'+str(my_wCnt)+'.svg',format='svg',dpi=dpi_a)
         plt.close()
 
         fArch1 = open(sPth+'msp-sil_w'+str(my_wCnt)+'.txt','w')
@@ -2207,7 +2310,7 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
                 qual_acc = np_asarray(qual_acc_[iPlt])
                 dim_acc = np_asarray(dim_acc_[iPlt])
                 "print 5,floor(len(pcaF_acc_)/5)+((mod(len(pcaF_acc_),5)!=0)*1)"
-                plt.subplot(5,floor(len(pcaF_acc_)/5)+((mod(len(pcaF_acc_),5)!=0)*1),iPlt+1)
+                plt.subplot(5,int(floor(len(pcaF_acc_)/5))+int((mod(len(pcaF_acc_),5)!=0)*1),iPlt+1)
                 plt.grid(axis=u'both')                
                 plt.ylabel(my_Prms[3])
                 plt.ylim([-1.01,1.01])
@@ -2215,11 +2318,12 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
                 plt.plot(pcaF_acc[pca_s],qual_acc[pca_s],marker='o',label = 'gSpan->PCA->hierarchcal clustering' )            
                 fArch1.write('sp:'+str(my_spCnt+iPlt*sp_jp)+'\nfeature_acc:\n'+str(pcaF_acc[pca_s])+'\nqual_acc:\n'+str(qual_acc[pca_s])+'\nPCAdim_acc:\n'+str(dim_acc[pca_s])+'\n')            
             plt.xlabel(make_farsi_text(('تعداد ویژگی')))
-            plt.savefig(sPth+'score change_w'+str(my_wCnt)+'.png')        
+            plt.savefig(sPth+'score change_w'+str(my_wCnt)+'.svg',format='svg',dpi=dpi_a)        
             plt.close()
             fArch1.close()
             """fig = plt.figure(figsize=(20,10))
-            ax = fig.gca(projection='3d')
+            #ax = fig.gca(projection='3d')
+            ax = fig.add_subplot(projection='3d')
             ax.plot(pcaF_acc[pca_s],qual_acc[pca_s],dim_acc[pca_s],marker='o',label = 'gSpan->PCA->hierarchcal clustering' )
             ax.legend()
             ax.grid(axis=u'both')
@@ -2266,7 +2370,8 @@ def run_plot97_pre(my_wCnt,distCr,clsPrm,my_spCnt,sPth,max0Chap,writePriem,chapt
     my_fRep4.close()   
     my_fRep3.write('\n************\nMaximum achived silhouette score for PCA is: '+str(maxSil_pca[0])+' in plot(s) number(s)'+str(maxSil_pca[1])+'\nmaximum achived max rate mean for clusters is: '+str(maxSil_pca[2])+' in plot(s) number(s)'+str(maxSil_pca[3])+'\nminimum achived max rate variance for clusters is: '+str(maxSil_pca[4])+' in plot(s) number(s)'+str(maxSil_pca[5]))   
     my_fRep3.close()
-    return my_w_minSp1,my_w_scores1,my_w_minSp2,my_w_scores2,my_labels,[preSbg_fr,preSbg_frName]
+    #return my_w_minSp1,my_w_scores1,my_w_minSp2,my_w_scores2,my_labels,[preSbg_fr,preSbg_frName]
+    return my_w_minSp1,my_w_scores1,my_w_minSp2,my_w_scores2,[maxSil[6:],maxSil_pca[6:]],[preSbg_fr,preSbg_frName]
 "-----------------------------------------------------------------------------"
 def fitF1(x, c):
     "Exponential decrease: eps fails if c>1"
@@ -2299,7 +2404,7 @@ def plot_ChLength(Adr):
     "plt.title('length of chapters')"
     plt.xlabel(make_farsi_text(('شماره سوره')))
     plt.ylabel('تعداد آیه')
-    plt.savefig(Adr+'/ch_Len.png')
+    plt.savefig(Adr+'/ch_Len.svg',format='svg',dpi=dpi_a)
     plt.close()
     return
 "-----------------------------------------------------------------------------"
@@ -2329,12 +2434,14 @@ def arbRoot(inRoots,rCase):
     return outRoots
 "-----------------------------------------------------------------------------"
 def calcDiff_cls(a99,b99):
+    #print(a99,'\n',b99)
     a99 = list(map(set,a99))
     b99 = list(map(set,b99))
     outLbs = []
     "case1 cl1==cl1,cl2==cl2"
     alla99 = a99[0].union(a99[1])
     allb99 = b99[1].union(b99[0])
+    
     nonCom = (alla99.union(allb99)).difference(alla99.intersection(allb99))
     outLbl1 = ((a99[0].difference(b99[0])).union(b99[0].difference(a99[0]))).difference(nonCom)
     outLbl2 = ((a99[1].difference(b99[0])).union(b99[0].difference(a99[1]))).difference(nonCom)
@@ -2377,10 +2484,11 @@ def lbl_conv(HClusteingRes,dlChs,same_c,same_k):
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 "        set parameters:       "
 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+#print(calcDiff_cls([[1,2,3,4],[8,9,10]],[[2,3,6,7,8],[3,4,5,6,9]]))
 t1 = time()
 print("Never use a window size less than which .fp has been made based on!!!!!!!!")
 "Case = test for test best results and otherwise it's main run"
-Tcase = 'test'
+Tcase = 'main'
 allStr = ''
 clsPrm = ['','average']
 clsDsMetric = 'self'
@@ -2415,16 +2523,18 @@ else:
     "window sizes:"
     my_wCns = [2,3,4,5,6,7,8,9]
     i_minSp0 =  [11,19, 23, 27, 31, 33, 35, 37]
-    if Tcase.find('test') != -1:
+    ############# ###############################
+    """if Tcase.find('test') != -1:
         "minimum support value for the best of each window size"
-        i_minSp1 = [11,24,23,32,51,48,50,42]
+        i_minSp1 = [11,19]#[23,51,40]#[48] for ws=8 as 50 in wrong run
         "number of features after PCA for best of each window size"
-        f = [2,2,2,2,2,2,2,2]
+        f = [2,2] #[2,2,2]
         "plot number for the best of each window size"
-        pltNm = [19,38,19,40,89,77,41,41]
+        pltNm = [20,21] #[19,89,41]
         "number of clusters in best results:"
-        cls_Rng = [8,14,9,4,2,5,2,2]
-        cls_Rng2 = sorted(list(set(cls_Rng)))
+        cls_Rng = [3,5]
+        cls_Rng2 = sorted(list(set(cls_Rng)))"""
+    #################################################
     fop = open(GlPth+'report_opt_MakkiMadani'+allStr+'.txt','w')
     fop.close()
     distCriteria = [clsDsMetric,clsDsMetric_pca]
@@ -2447,10 +2557,11 @@ else:
                 if StdScaling_F:
                     print("Error !!! standard scaling in binary mod!!!!")
                     break
-        if Tcase.find('test') != -1:   
+        """if Tcase.find('test') != -1:   
             test_Prms = [Tcase,f[ijk],pltNm[ijk],cls_Rng2,i_minSp1[ijk]]
         else:
-            test_Prms = ['']
+            test_Prms = ['']"""
+        test_Prms = ['']
         my_wCnt = my_wCns[ijk] 
         i_minSp = i_minSp0[ijk]
         resPath3 = GlPth+'w'+str(my_wCnt)+'/'
@@ -2460,73 +2571,88 @@ else:
                                          mxZeroChap,writeChGrs,chN,clsDsMetric,
                                          clsDsMetric_pca,CorpN,wghState,PCAFN,correct_mkMd,PCAJump,spJump,DelSubGr_Diff,StdScaling_F,fDecAlg,minMxR_Mean,minMxR_Var,test_Prms)
         px0.append([px1,py1,px2,py2,lbls_cmp,fsg_fr])
+
     fop = open(GlPth+'allDatas'+allStr+'.txt','w')
-    if Tcase.find('test') != -1:
+    """if Tcase.find('test') != -1:
         "1: between two clustering with 6 , 3 number of clusters,compare clustering in their cut-off for 2 clusters"
         fopCmp1 = open(GlPth+'bestCompares1'+allStr+'.txt','w')
         "2: between 6 , 3 -> compare clustering in their cut-off for 6 clusters"
-        fopCmp2 = open(GlPth+'bestCompares2'+allStr+'.txt','w')
+        fopCmp2 = open(GlPth+'bestCompares2'+allStr+'.txt','w')"""
+    "1: between two clustering with 6 , 3 number of clusters,compare clustering in their cut-off for 2 clusters"
+    fopCmp1 = open(GlPth+'bestCompares1'+allStr+'.txt','w')
     plt.figure(figsize=(20,10))
     plt.rc('font',family = 'Dejavu Sans',size = 10)
+    #print(px0)
     for my_wCnt in range(0,len(my_wCns)):
         "plt.plot(px0[my_wCnt][2],px0[my_wCnt][3],label='ws='+str(my_wCns[my_wCnt])+'_PCA')" 
         fop.write('\n****\nws='+str(my_wCns[my_wCnt])+'\n'+str(px0[my_wCnt][0])+'\n'+str(px0[my_wCnt][1])+'\n'+str(px0[my_wCnt][2])+'\n'+str(px0[my_wCnt][3])+'\n')
-        if Tcase.find('test') != -1:
-            plt.plot(px0[my_wCnt][0],px0[my_wCnt][1],label='ws='+str(my_wCns[my_wCnt]),marker = 'o')
-            lowLidx = 0
+        #if Tcase.find('test') != -1:
+        if (True):
+            #plt.plot(px0[my_wCnt][0],px0[my_wCnt][1],label='ws='+str(my_wCns[my_wCnt]),marker = 'o')
+            lowLidx = (px0[my_wCnt][3]).index(max(px0[my_wCnt][3]))
             "fopCmp1.write('***********************\nws = '+str(my_wCns[my_wCnt])+'\n')"
             """for clsn in px0[my_wCnt][4]:  
                 fopCmp1.write(str(clsn)+'\n')"""
             fopCmp1.write('..........\n')
-            fopCmp2.write('..................................Difference by other #ws\t#cls\tsurahs in each clusters\n')
+            #print(lowLidx,px0[my_wCnt][2],max(px0[my_wCnt][3]))
+            #fopCmp2.write('..................................Difference by other #ws\t#cls\tsurahs in each clusters\n')
             for wsCmp in range(my_wCnt+1,len(my_wCns)):
-                x1 = (px0[my_wCnt][4])[lowLidx]
-                fopCmp1.write('ws= '+str(my_wCns[my_wCnt])+' ,score= '+str(x1[1])+'\n')
-                for arr_ in x1[0]:
+                #print(((px0[my_wCnt][4])[1]),'**')
+                #print(((px0[my_wCnt][4])[1])[1])
+                #print(px0[my_wCnt][3],lowLidx)
+                #print((px0[my_wCnt][3][lowLidx]))
+                x1 = ((px0[my_wCnt][4])[1])[0]
+                
+                fopCmp1.write('ws= '+str(my_wCns[my_wCnt])+' ,score= '+str(((px0[my_wCnt][4])[1])[1])+'('+str((px0[my_wCnt][3][lowLidx]))+')\n')
+                for arr_ in x1:
                     fopCmp1.write(str(arr_)+'\n')
-                x1 = (px0[wsCmp][4])[lowLidx]
-                fopCmp1.write('ws= '+str(my_wCns[wsCmp])+' ,score= '+str(x1[1])+'\n')
-                for arr_ in x1[0]:
-                    fopCmp1.write(str(arr_)+'\n')    
-                dff_cls = calcDiff_cls((px0[my_wCnt][4])[lowLidx][0],(px0[wsCmp][4])[lowLidx][0])
+                x1 = ((px0[wsCmp][4])[1])[0] 
+                fopCmp1.write('ws= '+str(my_wCns[wsCmp])+' ,score= '+str(((px0[wsCmp][4])[1])[1])+'('+str((px0[wsCmp][3][lowLidx]))+')\n')
+                for arr_ in x1:
+                    fopCmp1.write(str(arr_)+'\n') 
+                dff_cls = calcDiff_cls(((px0[my_wCnt][4])[1])[0],((px0[wsCmp][4])[1])[0])
                 fopCmp1.write('diff(different,just in one cluster):\n')
-                nDff = 0
+                nDff = 0                
                 for dff_clsI in range(0,len(dff_cls)-1):
                     for dff_clsName in dff_cls[dff_clsI]:
-                        fopCmp1.write(dff_clsName+'('+str((px0[my_wCnt][5][0])[px0[my_wCnt][5][1].index(dff_clsName)])+', '+str((px0[wsCmp][5][0])[px0[wsCmp][5][1].index(dff_clsName)])+'),')
+                        #fopCmp1.write(dff_clsName+'('+str((px0[my_wCnt][5][0])[px0[my_wCnt][5][1].index(dff_clsName)])+', '+str((px0[wsCmp][5][0])[px0[wsCmp][5][1].index(dff_clsName)])+'),')
+                        fopCmp1.write(dff_clsName+', ')
                         if dff_clsName not in uniqChaps_:
                             uniqChaps_.append(dff_clsName)
                         nDff += 1
-                        if (px0[my_wCnt][5][0])[px0[my_wCnt][5][1].index(dff_clsName)] not in uniqChaps_nummbs:
+                        """if (px0[my_wCnt][5][0])[px0[my_wCnt][5][1].index(dff_clsName)] not in uniqChaps_nummbs:
                             uniqChaps_nummbs.append((px0[my_wCnt][5][0])[px0[my_wCnt][5][1].index(dff_clsName)])
-                        if  (px0[wsCmp][5][0])[px0[wsCmp][5][1].index(dff_clsName)] not in uniqChaps_nummbs:
-                            uniqChaps_nummbs.append((px0[wsCmp][5][0])[px0[wsCmp][5][1].index(dff_clsName)])
+                        if (px0[wsCmp][5][0])[px0[wsCmp][5][1].index(dff_clsName)] not in uniqChaps_nummbs:
+                            uniqChaps_nummbs.append((px0[wsCmp][5][0])[px0[wsCmp][5][1].index(dff_clsName)])"""
                     fopCmp1.write('\n')
+                
                 for dff_clsName in dff_cls[dff_clsI+1]:
+                    """
                     if dff_clsName in px0[my_wCnt][5][1]:
                         fopCmp1.write(dff_clsName+'('+str((px0[my_wCnt][5][0])[px0[my_wCnt][5][1].index(dff_clsName)])+'), ')
                     else:
-                        fopCmp1.write(dff_clsName+'('+str((px0[wsCmp][5][0])[px0[wsCmp][5][1].index(dff_clsName)])+'), ')                         
+                        fopCmp1.write(dff_clsName+'('+str((px0[wsCmp][5][0])[px0[wsCmp][5][1].index(dff_clsName)])+'), ')   """
+                    fopCmp1.write(dff_clsName+', ')                                              
                     if dff_clsName not in uniqChaps_abs:
                         uniqChaps_abs.append(dff_clsName)
                 fopCmp1.write('\n')
                 if len(dff_cls) > 2:
                     fopCmp1.write('*2 kind of clustering had equal worth\n')
-                print(max(cls_Rng[wsCmp],cls_Rng[my_wCnt]),cls_Rng[wsCmp],cls_Rng[my_wCnt])
-                if 2 in cls_Rng2:
+                #print(max(cls_Rng[wsCmp],cls_Rng[my_wCnt]),cls_Rng[wsCmp],cls_Rng[my_wCnt])
+                """if 2 in cls_Rng2:
                     present = cls_Rng2.index(max(cls_Rng[wsCmp],cls_Rng[my_wCnt]))
                 else:
                     present = cls_Rng2.index(max(cls_Rng[wsCmp],cls_Rng[my_wCnt])) + 1                    
                 fopCmp2.write('ws= '+str(my_wCns[my_wCnt])+', #clusters:'+str(cls_Rng[my_wCnt])+'\n')
-                for fopc00 in (px0[my_wCnt][4])[present][0]:
+                for fopc00 in ((px0[my_wCnt][4])[0])[present][0]:
                     fopCmp2.write(str(fopc00)+'\n')
                 fopCmp2.write('\nws= '+str(my_wCns[wsCmp])+' #clusters:'+str(cls_Rng[wsCmp])+'\n')
                 for fopc00 in (px0[wsCmp][4])[present][0]:
-                    fopCmp2.write(str(fopc00)+'\n')               
+                    fopCmp2.write(str(fopc00)+'\n')   """            
                 nDiff.append([my_wCnt+2,wsCmp+2,nDff])
                 nDiff_abs.append([my_wCnt+2,wsCmp+2,len(dff_cls[dff_clsI+1])])
-    if Tcase.find('test') != -1:
-        fopCmp2.close()
+    if (True): #Tcase.find('test') != -1:
+        #fopCmp2.close()
         fopCmp1.write('number of Different chaps: ws1\tws2\t#chapters\n')
         for Diff in nDiff:
             fopCmp1.write(str(Diff)+'\n')
@@ -2548,7 +2674,7 @@ else:
     plt.xlim([0,60])
     plt.xlabel(make_farsi_text(('کمینه پشتیبان')))
     plt.ylabel(make_farsi_text(('مقدار silhouette')))
-    plt.savefig(GlPth+'all0_'+allStr+'.png')
+    plt.savefig(GlPth+'all0_'+allStr+'.svg',format='svg',dpi=dpi_a)
     plt.close('all')
 
     fig = plt.figure(figsize=(20,10))
@@ -2561,12 +2687,13 @@ else:
     plt.ylim([-1.05,1.05])
     plt.xlabel(make_farsi_text(('کمینه پشتیبان')))
     plt.ylabel('silhouette score')
-    plt.savefig(GlPth+'all1_'+allStr+'.png')
+    plt.savefig(GlPth+'all1_'+allStr+'.svg',format='svg',dpi=dpi_a)
     plt.close('all')
     
     plt_s2 = 0
     fig = plt.figure(figsize=(20,10))
-    ax = fig.gca(projection='3d')
+    #ax = fig.gca(projection='3d')
+    ax = fig.add_subplot(projection='3d')
     for my_wCnt in range(0,len(my_wCns)):
         ax.plot(px0[my_wCnt][0],len(px0[my_wCnt][0])*[my_wCns[my_wCnt]],px0[my_wCnt][1],label = 'WS= '+str(my_wCns[my_wCnt]),marker = 'o')
         ax.plot(px0[my_wCnt][2],len(px0[my_wCnt][2])*[my_wCns[my_wCnt]],px0[my_wCnt][3],label = 'WS= '+str(my_wCns[my_wCnt])+'_PCA',marker = 'x') 
@@ -2583,11 +2710,12 @@ else:
     ax.set_zlim([-1.05,1.05])
     ax.set_ylim([0,my_wCns[-1]+1])
     plt.grid(axis=u'both')
-    plt.savefig(GlPth+'all2_'+allStr+'.png')
+    plt.savefig(GlPth+'all2_'+allStr+'.svg',format='svg',dpi=dpi_a)
     plt.close('all')
     
     fig = plt.figure(figsize=(20,10))
-    ax = fig.gca(projection='3d')
+    #ax = fig.gca(projection='3d')
+    ax = fig.add_subplot(projection='3d')
     for my_wCnt in range(0,len(my_wCns)):
         ax.plot(px0[my_wCnt][0],len(px0[my_wCnt][0])*[my_wCns[my_wCnt]],px0[my_wCnt][1],label = 'WS= '+str(my_wCns[my_wCnt]),marker='o')
     ax.legend()
@@ -2598,7 +2726,7 @@ else:
     ax.set_zlim([-1.05,1.05])
     ax.set_ylim([0,my_wCns[-1]+1])
     plt.grid(axis=u'both')
-    plt.savefig(GlPth+'all3_'+allStr+'.png')
+    plt.savefig(GlPth+'all3_'+allStr+'.svg',format='svg',dpi=dpi_a)
     plt.close()
 
 print ((time()-t1)/60)

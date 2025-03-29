@@ -1,9 +1,0 @@
-my_w_minSp1:
-[]
-my_w_scores1:
-[]
-dimensions:[]
-my_w_minSp2:
-[42]
-my_w_scores2:
-[0.8914499375360041]

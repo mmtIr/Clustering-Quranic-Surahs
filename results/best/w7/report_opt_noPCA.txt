@@ -1,2 +1,0 @@
-plot#	#clusters	type	windowSize	#chapter	#feature	minSupport	QualityMeasure	#True(Mk+Md)	#mkTrue/#realMk	mdTrue/realMd	#realMK-#realMD in each cluster	delChapters	sameChapters
-----------gSapn->clustering----------

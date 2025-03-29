@@ -1,3 +1,0 @@
-plot#	#clusters	type	windowSize	#chapter	#feature	minSupport	QualityMeasure	#True(Mk+Md)	#mkTrue/#realMk	mdTrue/realMd	#realMK-#realMD in each cluster	delChapters	sameChapters
-----------gSapn->clustering----------
-19	2	Root	4	108	9733	23	0.029710037451373635	87	86	1	1.0	0.03571428571428571	[[80, 27], [0, 1]]	0.8738317757009346	0.12616822429906543	 ,same chaps: 93, [{99, 100, 101, 105, 107, 110}]

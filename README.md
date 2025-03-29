@@ -4,9 +4,9 @@ Reported results in main article is in "results/best" folder.
 
 **To run this project:**
 1. Download  project folder.
-2. rename emptyWs folder to results.
-3. Run "Q_chCluster1_last.py". (produce results in "results" folder.)
-5. See the last lines of files, to find best results of the corresponding window size.
+2. rename emptyWs folder to "results".
+3. Run "Q_chCluster1_last.py"(produces results in "results" folder.).
+5. See the last lines of files "report_opt_PCA_all.txt" and "report_opt_noPCA_all.txt", to find best results of the corresponding window size.
 
 **NOTE!**
 1. Running corpus_build.py for quranic-corpus-morphology-0.4.txt[1] creates a preprocessed text of Holy Qur'an for you.
